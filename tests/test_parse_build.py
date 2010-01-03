@@ -5,6 +5,32 @@ import unittest
 from hudson import build
 
 class BasicBuildTest(unittest.TestCase):
+    def setUp(self):
+        self.b = build.from_string(self.buildxml)
+
+    def test_result(self):
+        self.assertEquals(self.b.result, build.SUCCESS)
+    
+    def test_builtOn(self):
+        self.assertEquals(self.b.builtOn, 'openSUSE')
+
+    def test_keepLog(self):
+        self.assertTrue(self.b.keepLog is False)
+
+    def test_workspace(self):
+        self.assertEquals(self.b.workspace, '/home/tyler/hudson/workspace/next')
+
+    def test_hudsonVersion(self):
+        self.assertEquals(self.b.hudsonVersion, '1.339')
+
+    def test_charset(self):
+        self.assertEquals(self.b.charset, 'UTF-8')
+
+    def test_number(self):
+        self.assertEquals(self.b.number, 10)
+
+    def test_duration(self):
+        self.assertEquals(self.b.duration, 88390)
     buildxml = '''<?xml version='1.0' encoding='UTF-8'?>
         <build>
         <actions>
@@ -278,32 +304,6 @@ class BasicBuildTest(unittest.TestCase):
         <culprits/>
         </build>'''
 
-    def setUp(self):
-        self.b = build.from_string(self.buildxml)
-
-    def test_result(self):
-        self.assertEquals(self.b.result, build.SUCCESS)
-    
-    def test_builtOn(self):
-        self.assertEquals(self.b.builtOn, 'openSUSE')
-
-    def test_keepLog(self):
-        self.assertTrue(self.b.keepLog is False)
-
-    def test_workspace(self):
-        self.assertEquals(self.b.workspace, '/home/tyler/hudson/workspace/next')
-
-    def test_hudsonVersion(self):
-        self.assertEquals(self.b.hudsonVersion, '1.339')
-
-    def test_charset(self):
-        self.assertEquals(self.b.charset, 'UTF-8')
-
-    def test_number(self):
-        self.assertEquals(self.b.number, 10)
-
-    def test_duration(self):
-        self.assertEquals(self.b.duration, 88390)
 
 if __name__ == '__main__':
     unittest.main()
