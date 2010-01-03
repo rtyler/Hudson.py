@@ -22,26 +22,19 @@ class Build(object):
         module = sys.modules.get(__name__)
         self.result = getattr(module, e.text, UNKNOWN)
 
-    def _handle_builtOn(self, e):
-        self.builtOn = e.text
-
     def _handle_keepLog(self, e):
         self.keepLog = e.text == 'true'
-
-    def _handle_workspace(self, e):
-        self.workspace = e.text
 
     def _handle_number(self, e):
         self.number = int(e.text)
 
-    def _handle_charset(self, e):
-        self.charset = e.text
-
     def _handle_duration(self, e):
         self.duration = int(e.text)
 
-    def _handle_hudsonVersion(self, e):
-        self.hudsonVersion = e.text
+    def _generic_handler(self, e):
+        if e.getchildren():
+            return
+        setattr(self, e.tag, e.text)
 
     @classmethod 
     def from_xml(cls, xml):
@@ -52,6 +45,7 @@ class Build(object):
             if hasattr(instance, method):
                 getattr(instance, method)(node)
                 continue
+            instance._generic_handler(node)
         return instance
 
 
